@@ -1,14 +1,8 @@
 let fs = require("fs");
-let data = fs.readFileSync("resources/src.txt");
-
-if (!Array.prototype.last){
-    Array.prototype.last = function () {
-        return this[this.length -1];
-    };
-}
-let variants = [
+let inputFile = "resources/variant_4.prn";
+let variantsTest = [
     [3, 1, 1],
-    [3, 1, 1],
+    [3, 1, 0],
     [1, 1, 3],
     [2, 1, 3],
     [3, 2, 1],
@@ -16,6 +10,14 @@ let variants = [
     [3, 2, 2],
     [1, 2, 3]
 ]
+
+
+if (!Array.prototype.last){
+    Array.prototype.last = function () {
+        return this[this.length -1];
+    };
+}
+
 function vectorMin(a,b){
     let cc = 0;
     for(var i = 0; i < a.length; ++i){
@@ -43,7 +45,26 @@ function Pareto(){
     }
     return variants.filter(a => a[a.length - 1] == 1);
 }
-console.log(variants);
-console.log("Ответ");
-Pareto(variants).map(a => console.log(a));
+
+//читение исходные данные
+let readline = require('readline'),
+        instream = fs.createReadStream(inputFile),
+        outstream = new (require('stream'))(),
+        rl = readline.createInterface(instream, outstream);
+let variants = [];
+
+rl.on('line', function (line) {
+    l = line.replace(/      /g,","); 
+    variants.push(l.split(",").slice(1,4).map(a => {
+        res = a.trim()
+        return parseInt(res)
+    }));
+});
+rl.on('close', function(){
+    //Pareto(variants).map(a => console.log(a));
+})
+
+//console.log(variants);
+//console.log("Ответ");
+Pareto(variantsTest).map(a => console.log(a));
 
